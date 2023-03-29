@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: Login API Autenticacao
+    version: 1.0.0
+    description: Demo project for login authentication
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+  jpa:
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    database: POSTGRESQL
+    generate-ddl: true
+    hibernate:
+       ddl-auto: create
+#        ddl-auto: update
+    properties:
+        hibernate:
+            temp:
+               use_jdbc_metadata_defaults: false
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+     context-path: /
+
+management:
+  health:
+    probes:
+      enabled: true
+  security:
+    enabled: true
+  endpoint:
+    metrics:
+      enabled: true
+    health:
+      show-details: always
+      group:
+        readiness:
+          include: readinessState,db
+        liveness:
+          include: livenessState,ping
