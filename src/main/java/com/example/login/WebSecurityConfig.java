@@ -22,63 +22,37 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private DataSource dataSource;
 
-/*	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http
-				.authorizeRequests()
-				.antMatchers("/", "/home").permitAll()
-				.anyRequest().authenticated()
-				.and()
-				.formLogin()
-						.loginPage("/login")
-						.permitAll()
-						.and()
-				.logout()
-				.permitAll();
-	}*/
-
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http
+			http
 				.authorizeRequests()
 				.anyRequest().authenticated()
 				.and()
 				.formLogin(form -> form
 						.loginPage("/login")
+						.defaultSuccessUrl("/home", true)
 						.permitAll()
 				)
 				.logout(logout -> logout.logoutUrl("/logout"));
 	}
 	
-	/*@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http
-		.authorizeRequests()
-			.anyRequest().authenticated()
-		.and()
-		.formLogin(form -> form
-            .loginPage("/login")
-            .defaultSuccessUrl("/home", true)
-            .permitAll()
-        )
-		.logout(logout -> logout.logoutUrl("/logout"));
-	}*/
-	
-/*	@Override
+	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		auth
-			.jdbcAuthentication()
+
+	/*	UserDetails user =
+				 User.builder()
+					.username("admin")
+					.password(encoder.encode("admin"))
+					.roles("ADM")
+					.build();*/
+
+		auth.jdbcAuthentication()
 			.dataSource(dataSource)
-			.passwordEncoder(encoder);
-		
-//		UserDetails user =
-//				 User.builder()
-//					.username("maria")
-//					.password(encoder.encode("maria"))
-//					.roles("ADM")
-//					.build();
-	}*/
+			.passwordEncoder(encoder)
+			//.withUser(user)
+			;
+	}
 
 	@Bean
 	public UserDetailsService userDetailsService() {
